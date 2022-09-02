@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuantoGastei.Domain\QuantoGastei.Domain.csproj" />
+    <ProjectReference Include="..\QuantoGastei.Infra.Data\QuantoGastei.Infra.Data.csproj" />
+  </ItemGroup>
+
 </Project>

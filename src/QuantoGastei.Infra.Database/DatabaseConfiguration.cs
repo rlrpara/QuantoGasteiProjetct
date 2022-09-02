@@ -38,7 +38,7 @@ namespace QuantoGastei.Infra.Database
         {
             try
             {
-                ObterParametrosConexao();
+                ObterParametrosConexao(false);
                 using var conexao = ObterConexao();
                 conexao.Open();
                 return conexao.State == ConnectionState.Open;
