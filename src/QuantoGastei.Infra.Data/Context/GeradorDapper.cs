@@ -273,6 +273,59 @@ namespace QuantoGastei.Infra.Data.Context
 
             return sqlPesquisa.ToString();
         }
+
+        public static string CriaTabela<T>(string nomeBanco) where T : class
+        {
+            _nomeBanco = nomeBanco;
+            string chavePrimaria = string.Empty;
+            List<string> campos = new List<string>();
+            StringBuilder sqlConstraint = new StringBuilder();
+
+            foreach (PropertyInfo item in typeof(T).GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public))
+            {
+                Nota? nota = (Nota)item.GetCustomAttribute(typeof(Nota));
+
+                if (nota != null)
+                {
+                    var nomeCampo = item.GetCustomAttribute<ColumnAttribute>().Name;
+
+                    if (nota.UseToGet)
+                    {
+                        if (nota.PrimaryKey || item.GetCustomAttributes().FirstOrDefault() is KeyAttribute)
+                            chavePrimaria = $"{nomeCampo}";
+
+                        else if (!string.IsNullOrWhiteSpace(nomeCampo))
+                            campos.Add($"{nomeCampo} {TipoPropriedade(item, nota.TextMax)}");
+                    }
+
+                    if (!string.IsNullOrEmpty(nota.ForeignKey))
+                    {
+                        string tabelaChaveEstrangeira = $"{nota.ForeignKey.ToLower()}";
+                        string campoChaveEstrangeira = $"{nomeCampo}";
+                        string nomeChave = $"FK_{ObterNomeTabela<T>()}_{campoChaveEstrangeira}".ToUpper();
+                        sqlConstraint.AppendLine($"ALTER TABLE {ObterNomeTabela<T>()}");
+                        sqlConstraint.AppendLine($"ADD CONSTRAINT {nomeChave} FOREIGN KEY ({campoChaveEstrangeira})");
+                        sqlConstraint.AppendLine($"REFERENCES {_nomeBanco}.{tabelaChaveEstrangeira} (ID) ON DELETE NO ACTION ON UPDATE NO ACTION;{Environment.NewLine}");
+                    }
+                }
+            }
+
+            var sqlPesquisa = new StringBuilder();
+
+            sqlPesquisa.AppendLine($"IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = '{ObterNomeTabela<T>()}')");
+            sqlPesquisa.AppendLine($"BEGIN");
+            sqlPesquisa.AppendLine($"   CREATE TABLE {ObterNomeTabela<T>()}(");
+            sqlPesquisa.AppendLine($"        {chavePrimaria} int IDENTITY(1,1) NOT NULL,");
+            sqlPesquisa.AppendLine($"        {string.Join($",{Environment.NewLine}   ", campos.ToArray())},");
+            sqlPesquisa.AppendLine($"  CONSTRAINT [PK_{ObterNomeTabela<T>()}] PRIMARY KEY CLUSTERED ");
+            sqlPesquisa.AppendLine($"(");
+            sqlPesquisa.AppendLine($"   {chavePrimaria} ASC");
+            sqlPesquisa.AppendLine($")WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]");
+            sqlPesquisa.AppendLine($") ON [PRIMARY]");
+            sqlPesquisa.AppendLine($"END");
+
+            return sqlPesquisa.ToString();
+        }
         #endregion
     }
 }

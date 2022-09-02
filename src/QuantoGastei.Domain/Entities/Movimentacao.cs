@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace QuantoGastei.Domain.Entities
 {
     [Table(name: "CATEGORIA")]
-    public class Momentacao : EntityBase
+    public class Movimentacao : EntityBase
     {
         [Column(name: "DESCRICAO", Order = 2)]
         [Nota(UseIndex = true)]
