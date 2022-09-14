@@ -1,4 +1,5 @@
-﻿using QuantoGastei.Domain.Interfaces;
+﻿using QuantoGastei.Domain.Entities;
+using QuantoGastei.Domain.Interfaces;
 
 namespace QuantoGastei.Infra.Data.Repositories
 {
@@ -16,7 +17,10 @@ namespace QuantoGastei.Infra.Data.Repositories
         #endregion
 
         #region [Métodos Públicos]
-
+        public IEnumerable<Movimentacao> Obtertodos(string sqlWhere)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
