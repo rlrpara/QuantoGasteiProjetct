@@ -16,7 +16,7 @@ export class MovimentacaoService {
       {
         codigo: 1,
         descricao: 'Energia Elétrica',
-        dataVencimento: new Date('2023-02-10'),
+        dataVencimento: new Date('2023-03-10T00:00:00.000Z'),
         parcela: 1,
         totalParcelas: 1,
         tipo: 1,
