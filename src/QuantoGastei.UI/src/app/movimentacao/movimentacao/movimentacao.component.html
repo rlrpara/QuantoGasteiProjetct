@@ -1,1 +1,45 @@
-<p>movimentacao works!</p>
+<mat-card>
+
+  <mat-toolbar color="primary">Movimentaçõe do Mês</mat-toolbar>
+
+  <table mat-table [dataSource]="movimentacoes" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="codigo">
+      <th mat-header-cell *matHeaderCellDef> Id. </th>
+      <td mat-cell *matCellDef="let item"> {{item.codigo}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="descricao">
+      <th mat-header-cell *matHeaderCellDef> Descrição </th>
+      <td mat-cell *matCellDef="let item"> {{item.descricao}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataVencimento">
+      <th mat-header-cell *matHeaderCellDef> Data de Vencimento </th>
+      <td mat-cell *matCellDef="let item"> {{item.dataVencimento | date:'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataPagamento">
+      <th mat-header-cell *matHeaderCellDef> Data de Pagamento </th>
+      <td mat-cell *matCellDef="let item"> {{item.dataPagamento}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="parcela">
+      <th mat-header-cell *matHeaderCellDef> Parcela </th>
+      <td mat-cell *matCellDef="let item"> {{item.parcela}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalParcelas">
+      <th mat-header-cell *matHeaderCellDef> Total parcelas </th>
+      <td mat-cell *matCellDef="let item"> {{item.totalParcelas}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="valor">
+      <th mat-header-cell *matHeaderCellDef> Valor(R$) </th>
+      <td mat-cell *matCellDef="let item"> R$ {{item.valor}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns;"></tr>
+  </table>
+</mat-card>
